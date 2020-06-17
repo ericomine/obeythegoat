@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
@@ -15,15 +16,34 @@ class NewVisitorTest(unittest.TestCase):
 
         # User notices page title mentions todo
         self.assertIn('Todo', self.browser.title)
-        self.fail('Finish the test!')
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('Todo', header_text)
+
+        # User is invited to enter a todo item
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(
+            inputbox.get_attribute('placeholder'),
+            'Enter a todo item'
+        )
 
         # User types "Buy peacock feathers" into textbox
+        # send_keys is Selenium's way to type into input elements
+        inputbox.send_keys('Buy peacock feathers')
 
         # User hits enter, page updates and lists
         # "1: Buy peacock feathers" as an item im todo list
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
 
         # There is still a textbox inviting user to add new item.
         # User enters "Use peacock feathers to make a fly"
+        table = self.browser.find_elements_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == '1: Buy peacock feathers' for row in rows)
+        )
+
+        self.fail('finish the test')
 
         # Page updates, showing both items
 
