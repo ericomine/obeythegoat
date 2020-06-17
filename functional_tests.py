@@ -1,29 +1,38 @@
 from selenium import webdriver
+import unittest
 
-browser = webdriver.Chrome()
+class NewVisitorTest(unittest.TestCase):
 
-# User opens to-do app
-browser.get('http://localhost:8000')
+    def setUp(self):
+        self.browser = webdriver.Chrome()
 
-# User notices page title mentions todo
-assert('Todo' in browser.title)
+    def tearDown(self):
+        self.browser.quit()
 
-# User is invited to enter a todo item
+    def test_can_start_list_and_retrieve(self):
+        # User opens to-do app
+        self.browser.get('http://localhost:8000')
 
-# User types "Buy peacock feathers" into textbox
+        # User notices page title mentions todo
+        self.assertIn('Todo', self.browser.title)
+        self.fail('Finish the test!')
 
-# User hits enter, page updates and lists
-# "1: Buy peacock feathers" as an item im todo list
+        # User types "Buy peacock feathers" into textbox
 
-# There is still a textbox inviting user to add new item.
-# User enters "Use peacock feathers to make a fly"
+        # User hits enter, page updates and lists
+        # "1: Buy peacock feathers" as an item im todo list
 
-# Page updates, showing both items
+        # There is still a textbox inviting user to add new item.
+        # User enters "Use peacock feathers to make a fly"
 
-# Site has generated a unique URL for user and some
-# explanatory text.
+        # Page updates, showing both items
 
-# By visiting the URL, todo list is shown.
+        # Site has generated a unique URL for user and some
+        # explanatory text.
 
-# User exits site.
-browser.quit()
+        # By visiting the URL, todo list is shown.
+
+        # User exits site.
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
