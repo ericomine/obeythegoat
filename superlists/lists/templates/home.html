@@ -4,9 +4,20 @@
     </head>
     <body>
         <h1>Your Todo list</h1>
-        <input id="id_new_item" 
-            placeholder="Enter a todo item" />
+        <form method="POST">
+            <input
+                id="id_new_item" 
+                name="item_text" 
+                placeholder="Enter a todo item" />
+            <!-- Django expects csrf_token as protection against 
+                 Cross-Site Request Forgery in every form -->
+            {% csrf_token %}
+        </form>
+
         <table id="id_list_table">
+            <tr>
+                <td>1: {{ new_item_text }}</td>
+            </tr>
         </table>
     </body>
 </html>
