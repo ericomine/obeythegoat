@@ -5,9 +5,6 @@ from django.urls import resolve
 from lists.views import home_page
 from lists.models import Item, List
 
-# TODO: display multiple items in the table at home_page
-# TODO: Support more than one todo list
-
 # Create your tests here.
 class HomePageTest(TestCase):
 

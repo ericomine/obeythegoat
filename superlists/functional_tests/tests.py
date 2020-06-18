@@ -4,7 +4,6 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 import time
 
-# Adjust model so that items are associated with different lists
 # Add unique URL for each list
 # Add URLs for adding a new item to an existing list via POST
 
