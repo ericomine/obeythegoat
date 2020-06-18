@@ -6,7 +6,6 @@ import time
 
 # Adjust model so that items are associated with different lists
 # Add unique URL for each list
-# Add a URL for creating a new list via POST
 # Add URLs for adding a new item to an existing list via POST
 
 MAX_WAIT = 3
