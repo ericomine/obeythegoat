@@ -4,7 +4,12 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 import time
 
-MAX_WAIT = 10
+# Adjust model so that items are associated with different lists
+# Add unique URL for each list
+# Add a URL for creating a new list via POST
+# Add URLs for adding a new item to an existing list via POST
+
+MAX_WAIT = 3
 
 class NewVisitorTest(LiveServerTestCase):
 
@@ -33,6 +38,44 @@ class NewVisitorTest(LiveServerTestCase):
                 if (time.time() - start_time > MAX_WAIT):
                     raise e
                 time.sleep(0.5)
+
+    def test_multiple_users_can_start_lists_at_different_urls(self):
+        # User starts a new todo list
+        self.browser.get(self.live_server_url)
+
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy peacock feathers')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: Buy peacock feathers')
+
+        # User notices the list has a unique URL
+        user_list_url = self.browser.current_url
+        self.assertRegex(user_list_url, r'/lists/.+')
+
+        ## Now a new user comes opens the site.
+        ## We use a new browser session to cleanup.
+        self.browser.quit()
+        self.browser = webdriver.Chrome()
+
+        # Verify no data from previous session
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        
+        # New user starts a new list by entering a new item
+        inputbox = self.browser.get_element_by_id('id_new_item')
+        inputbox.send_keys('Buy milk')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: Buy milk')
+
+        # New user gets his own unique URL
+        new_user_list_url = self.browser.current_url
+        self.assertRegex(new_user_list_url, r'/lists/.+')
+        self.assertNotEqual(new_user_list_url, user_list_url)
+
+        # Check new todo is shown
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Buy milk', page_text)
 
     def test_can_start_list_and_retrieve(self):
         # User opens to-do app
@@ -71,12 +114,5 @@ class NewVisitorTest(LiveServerTestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.wait_for_row_in_list_table('1: Buy peacock feathers')
         self.wait_for_row_in_list_table('2: Use peacock feathers to make a fly')
-
-        self.fail('finish the test')
-
-        # Site has generated a unique URL for user and some
-        # explanatory text.
-
-        # By visiting the URL, todo list is shown.
-
+        
         # User exits site.
