@@ -1,17 +1,5 @@
-<html>
-    <head>
-        <title>Todo lists</title>
-    </head>
-    <body>
-        <h1>Start a new Todo list</h1>
-        <form action="/lists/new" method="POST">
-            <input
-                id="id_new_item" 
-                name="item_text" 
-                placeholder="Enter a todo item" />
-            <!-- Django expects csrf_token as protection against 
-                 Cross-Site Request Forgery in every form -->
-            {% csrf_token %}
-        </form>
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block header_text %}Start a new Todo list{% endblock %}
+        
+{% block form_action %}/lists/new{% endblock %}

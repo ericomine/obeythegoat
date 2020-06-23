@@ -1,23 +1,13 @@
-<html>
-    <head>
-        <title>Todo lists</title>
-    </head>
-    <body>
-        <h1>Your Todo list</h1>
-        <form action="/lists/{{ list.id }}/add_item" method="POST">
-            <input
-                id="id_new_item" 
-                name="item_text" 
-                placeholder="Enter a todo item" />
-            <!-- Django expects csrf_token as protection against 
-                 Cross-Site Request Forgery in every form -->
-            {% csrf_token %}
-        </form>
+{% extends 'base.html' %}
+
+{% block header_text %}Start a new Todo list{% endblock %}
         
-        <table id="id_list_table">
-            {% for item in list.item_set.all %}
-                <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
-            {% endfor %}
-        </table>
-    </body>
-</html>
+{% block form_action %}/lists/{{ list.id }}/add_item{% endblock %}
+
+{% block table %}
+    <table id="id_list_table" class="table">
+        {% for item in list.item_set.all %}
+            <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
+        {% endfor %}
+    </table>
+{% endblock %}
