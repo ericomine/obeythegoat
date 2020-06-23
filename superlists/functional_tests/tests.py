@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 import time
+import os
 
 MAX_WAIT = 3
 
@@ -13,6 +14,14 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome()
+
+        # LiveServerTestCase assumes dev wants to use its test server.
+        # When in staging we want to use a real server.
+        # For this we'll create env variable STAGING_SERVER
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            # To make use of it, we replace live_server_url.
+            self.live_server_url = 'http://' + staging_server
 
     def tearDown(self):
         self.browser.quit()
@@ -108,8 +117,6 @@ class NewVisitorTest(StaticLiveServerTestCase):
         time.sleep(1)
 
         # Page updates, showing both items
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
         self.wait_for_row_in_list_table('1: Buy peacock feathers')
         self.wait_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
@@ -140,3 +147,5 @@ class NewVisitorTest(StaticLiveServerTestCase):
             512,
             delta=10
         )
+
+    
