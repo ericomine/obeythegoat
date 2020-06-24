@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '&5tl_dv@ew=por4u%z!5=asx-(75^%*amjf!i7%gv&jtcpqbrb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['iacutin.ga', 'www.iacutin.ga']
 
 
 # Application definition
